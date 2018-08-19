@@ -58,5 +58,25 @@ Post::where - не найдено, по этому мы вызываем callSta
 
     //Post::where(['fafda'=> 'dsd, 'gfgd'=>'hhh'])->delete();
     //Post::where('fafda'=> 'dsd)->where('ba'=> 'by')->delete();
-    EP4
-    
+    EP4 
+    EP5
+Post::with('comments')->get();
+<!--how does it works underneath of hood -->
+first of all let`s create a schema of comments
+php artisan make:migration:schema create_comments_table --schema="post_id:integer:foregin, body:text" 
+<!-- стъоздаст модель комментов  -->
+
+        Schema::create('comments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('post_id')->unsigned();
+            $table->foreign('post_id')->references('id')->on('posts');
+            $table->text('body');
+            $table->timestamps();
+        });
+
+<!-- хорошее решение как связать таблицы по id без альтер тэйбл -->
+
+Post::with('comment')->find(23);
+how this works? 
+//записал то чего дейсвтительно не знал
+User::with('post.comment')  вытащит взаимоотношения постов и в них взаимоотношения комент
